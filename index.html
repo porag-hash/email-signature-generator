@@ -7,25 +7,39 @@
     <!-- Google Web Fonts for Cursive Signature Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background-color: #f0f2f5; height: 100vh; color: #333; }
-        .sidebar { width: 440px; background: #ffffff; padding: 24px; box-shadow: 2px 0 10px rgba(0,0,0,0.06); overflow-y: auto; height: 100vh; }
+        .sidebar { width: 480px; min-width: 480px; background: #ffffff; padding: 24px; box-shadow: 2px 0 10px rgba(0,0,0,0.06); overflow-y: auto; height: 100vh; }
         .sidebar h2 { font-size: 20px; color: #1c3461; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #e47825; padding-bottom: 8px; }
-        .section-title { font-size: 13px; font-weight: 700; color: #1c3461; text-transform: uppercase; letter-spacing: 0.6px; margin: 20px 0 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+        
+        .section-title { font-size: 13px; font-weight: 700; color: #1c3461; text-transform: uppercase; letter-spacing: 0.6px; margin: 22px 0 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+        
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #555; }
         .form-group input[type="text"], .form-group input[type="email"], .form-group select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #1c3461; ring: 2px solid #1c3461; }
-        .location-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px; }
-        .location-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-        .location-header label { font-size: 12px; font-weight: 700; color: #1c3461; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .location-item input[type="text"] { width: 100%; padding: 6px 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #1c3461; }
+        
+        /* Dynamic Location Cards */
+        .location-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; position: relative; display: flex; flex-direction: column; gap: 8px; }
+        .location-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+        .location-card-header .card-title { font-size: 12px; font-weight: 700; color: #1c3461; }
+        .btn-delete { background: none; border: none; color: #dc2626; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; line-height: 1; transition: background 0.1s; }
+        .btn-delete:hover { background-color: #fee2e2; }
+        
+        .location-inputs { display: flex; gap: 8px; }
+        .location-inputs .col-label { flex: 1; }
+        .location-inputs .col-address { flex: 2; }
+        .location-card input[type="text"] { width: 100%; padding: 7px 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; }
+        
+        .btn-add-location { background-color: #f1f5f9; color: #1c3461; border: 1px dashed #94a3b8; width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px;}
+        .btn-add-location:hover { background-color: #e2e8f0; border-color: #64748b; }
+
         .toggle-group { display: flex; align-items: center; gap: 8px; margin: 12px 0; font-size: 13px; font-weight: 600; color: #1c3461; }
         .main-content { flex: 1; padding: 30px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
         .preview-card { background: #fff; padding: 35px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; max-width: 980px; overflow-x: auto; }
-        .btn-copy { background: #1c3461; color: #fff; border: none; padding: 13px 26px; font-size: 15px; border-radius: 5px; cursor: pointer; margin-top: 25px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-copy { background: #1c3461; color: #fff; border: none; padding: 13px 26px; font-size: 15px; border-radius: 5px; cursor: pointer; margin-top: 25px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
         .btn-copy:hover { background: #132444; }
         .instructions-card { margin-top: 25px; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; max-width: 980px; font-size: 14px; line-height: 1.6; }
         .instructions-card h4 { color: #e47825; margin-top: 0; font-size: 16px; }
@@ -33,7 +47,7 @@
 </head>
 <body>
 
-    <!-- Configuration Panel -->
+    <!-- Sidebar Control Panel -->
     <div class="sidebar">
         <h2>Signature Generator</h2>
 
@@ -80,12 +94,16 @@
             <input type="email" id="inp-email" value="porag@cottagehomecare.com" oninput="renderSignature()">
         </div>
         <div class="form-group">
-            <label>Website Display Text / URL</label>
+            <label>Website Display URL</label>
             <input type="text" id="inp-web" value="riversideselect.com" oninput="renderSignature()">
         </div>
 
-        <div class="section-title">Office Locations (Toggle & Edit)</div>
-        <div id="office-inputs-container"></div>
+        <!-- Dynamic Addresses Area -->
+        <div class="section-title">
+            <span>Office Locations</span>
+        </div>
+        <div id="office-list"></div>
+        <button type="button" class="btn-add-location" onclick="addLocation()">+ Add Address</button>
 
         <div class="section-title">Social Media Links</div>
         <div class="form-group">
@@ -112,13 +130,13 @@
         </div>
     </div>
 
-    <!-- Live Preview Viewport -->
+    <!-- Main Output / Preview -->
     <div class="main-content">
         <div class="preview-card">
             <h3 style="margin: 0 0 15px; color: #1c3461;">Live Preview</h3>
             
             <div id="signature-preview">
-                <!-- Injected via JavaScript -->
+                <!-- Signature Table Renders Here -->
             </div>
 
             <button class="btn-copy" onclick="copySignature()">
@@ -129,44 +147,84 @@
         <div class="instructions-card">
             <h4>Instructions: Applying to Gmail</h4>
             <ol>
-                <li>Customize your personal contact info and check or uncheck which office locations you need.</li>
+                <li>Update your personal contact details. Use <strong>"+ Add Address"</strong> to include new offices, or <strong>"✕"</strong> to remove addresses you don't need.</li>
                 <li>Click <strong>"Copy Signature for Gmail"</strong>.</li>
                 <li>Open <strong>Gmail</strong>, click the <strong>Gear icon</strong> (Settings) &rarr; <strong>"See all settings"</strong>.</li>
                 <li>Under the <strong>General</strong> tab, scroll down to the <strong>Signature</strong> section.</li>
-                <li>Click <strong>"Create new"</strong> (or select your existing signature) and press <strong>Ctrl+V</strong> (or <strong>Cmd+V</strong> on Mac) into the editor box.</li>
-                <li>Scroll to the bottom of the page and click <strong>"Save Changes"</strong>.</li>
+                <li>Click <strong>"Create new"</strong> (or select an existing signature) and press <strong>Ctrl+V</strong> (or <strong>Cmd+V</strong> on Mac) into the editor box.</li>
+                <li>Scroll to the bottom and click <strong>"Save Changes"</strong>.</li>
             </ol>
         </div>
     </div>
 
     <script>
-        // Preset office data from the original template
-        const initialOffices = [
-            { id: "freeport", label: "Freeport Office", address: "294 West Merrick Road, Suite 12 Freeport NY, 11520", enabled: true },
-            { id: "queens", label: "Queens Office", address: "126-01 Liberty Avenue, South Richmond Hill Queens, New York 11419", enabled: true },
-            { id: "nj", label: "New Jersey Office", address: "97 Newkirk St STE 337, Jersey City, NJ 07306", enabled: true },
-            { id: "md", label: "Maryland Office", address: "6310 Stevens Forest Rd, Suite 100, Columbia, MD 21046", enabled: true },
-            { id: "miami", label: "Miami Office", address: "1380 NE Miami Garden Drive Suite 140-C Miami, FL 33179", enabled: true },
-            { id: "ct", label: "Connecticut Office", address: "510 Tolland St, STE #203 East Hartford, CT 06108", enabled: true },
-            { id: "mi", label: "Michigan Office", address: "150 W Jefferson Ave, Suite P307, Detroit, MI, 48226 United States", enabled: true }
+        // Preset addresses matching the placeholder template
+        let officeLocations = [
+            { id: 1, label: "Freeport Office", address: "294 West Merrick Road, Suite 12 freeport NY,11520" },
+            { id: 2, label: "Queens Office", address: "126-01 Liberty Avenue, South Richmond Hill Queens, New York 11419" },
+            { id: 3, label: "New Jersey Office", address: "97 Newkirk St STE 337, Jersey City, NJ 07306" },
+            { id: 4, label: "Maryland Office", address: "6310 Stevens Forest Rd, Suite 100, Columbia, MD 21046" },
+            { id: 5, label: "Miami Office", address: "1380 NE Miami Garden Drive Suite 140-C Miami, FL 33179" },
+            { id: 6, label: "Connecticut Office", address: "510 Tolland St, STE #203 East Hartford, CT 06108" },
+            { id: 7, label: "Michigan Office", address: "150 W Jefferson Ave, Suite P307, Detroit,MI, 48226 United States" }
         ];
 
-        // Build sidebar office inputs
-        function initOfficeInputs() {
-            const container = document.getElementById('office-inputs-container');
-            container.innerHTML = initialOffices.map((office, idx) => `
-                <div class="location-item">
-                    <div class="location-header">
-                        <label for="chk-office-${idx}">
-                            <input type="checkbox" id="chk-office-${idx}" ${office.enabled ? 'checked' : ''} onchange="renderSignature()">
-                            ${office.label}
-                        </label>
+        // Render editable cards in the sidebar
+        function renderOfficeInputs() {
+            const container = document.getElementById('office-list');
+            container.innerHTML = '';
+
+            officeLocations.forEach((office, index) => {
+                const card = document.createElement('div');
+                card.className = 'location-card';
+                card.innerHTML = `
+                    <div class="location-card-header">
+                        <span class="card-title">Address ${index + 1}</span>
+                        <button type="button" class="btn-delete" title="Remove address" onclick="deleteOffice(${index})">✕</button>
                     </div>
-                    <input type="text" id="txt-office-${idx}" value="${office.address}" oninput="renderSignature()" placeholder="Office address">
-                </div>
-            `).join('');
+                    <div class="location-inputs">
+                        <div class="col-label">
+                            <input type="text" value="${office.label}" placeholder="Label (e.g. Dallas Office)" oninput="updateOfficeLabel(${index}, this.value)">
+                        </div>
+                        <div class="col-address">
+                            <input type="text" value="${office.address}" placeholder="Full Address" oninput="updateOfficeAddress(${index}, this.value)">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
+        // Add a new empty location card
+        function addLocation() {
+            officeLocations.push({
+                id: Date.now(),
+                label: "",
+                address: ""
+            });
+            renderOfficeInputs();
+            renderSignature();
+        }
+
+        // Delete a location card
+        function deleteOffice(index) {
+            officeLocations.splice(index, 1);
+            renderOfficeInputs();
+            renderSignature();
+        }
+
+        // Update handlers
+        function updateOfficeLabel(index, val) {
+            officeLocations[index].label = val;
+            renderSignature();
+        }
+
+        function updateOfficeAddress(index, val) {
+            officeLocations[index].address = val;
+            renderSignature();
+        }
+
+        // Render full signature table
         function renderSignature() {
             const name = document.getElementById('inp-name').value;
             const fontStyle = document.getElementById('inp-font-style').value;
@@ -183,7 +241,7 @@
             const tt = document.getElementById('inp-tt').value;
             const showHipaa = document.getElementById('inp-hipaa').checked;
 
-            // Compute font styling for cursive name
+            // Name styling
             let nameFontCSS = "font-family: 'Brush Script MT', 'Dancing Script', 'Segoe Script', cursive; font-size: 27px; line-height: 29px; font-weight: 600;";
             if (fontStyle === 'cursive-dancing') {
                 nameFontCSS = "font-family: 'Dancing Script', 'Brush Script MT', cursive; font-size: 26px; line-height: 28px; font-weight: 700;";
@@ -193,47 +251,50 @@
                 nameFontCSS = "font-family: sans-serif; font-size: 20px; line-height: 22px; font-weight: 700;";
             }
 
-            // Build active office table rows
+            // Build active addresses
             let officeRowsHTML = "";
-            initialOffices.forEach((office, idx) => {
-                const isChecked = document.getElementById(`chk-office-${idx}`).checked;
-                const addr = document.getElementById(`txt-office-${idx}`).value.trim();
-                if (isChecked && addr) {
-                    const mapURL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`;
-                    officeRowsHTML += `
-                        <tr>
-                            <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600;">
-                                <p style="margin: 0.04px;">
-                                    <span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">${office.label}:</span>
-                                    <a href="${mapURL}" target="_blank" rel="noreferrer" style="text-decoration: none; font-family: sans-serif; font-size: 15px; margin-left: 2px; font-style: normal; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${addr}</a>
-                                </p>
-                            </td>
-                        </tr>
-                    `;
-                }
+            const activeOffices = officeLocations.filter(o => o.address.trim() !== "");
+            
+            activeOffices.forEach((office, i) => {
+                const isLast = (i === activeOffices.length - 1);
+                const paddingBottom = isLast ? "padding-bottom: 14px;" : "";
+                const mapURL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.address)}`;
+                
+                // If label is empty, just don't show the bold prefix
+                const labelHTML = office.label.trim() ? `<span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">${office.label}:</span>` : '';
+                const marginLeft = office.label.trim() ? "margin-left: 2px;" : "";
+
+                officeRowsHTML += `
+                    <tr>
+                        <td style="padding-top: 1px; ${paddingBottom} border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600;">
+                            <p style="margin: 0.04px;">
+                                ${labelHTML}
+                                <a href="${mapURL}" target="_blank" rel="noreferrer" style="text-decoration: none; font-family: sans-serif; font-size: 15px; ${marginLeft} font-style: normal; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${office.address}</a>
+                            </p>
+                        </td>
+                    </tr>
+                `;
             });
 
-            // Social media badges
+            // Social icons
             const socialBadgesHTML = `
                 <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                     <tbody>
                         <tr>
-                            ${fb ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${fb}" target="_blank" rel="noreferrer"><img alt="facebook" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484158/omypyzelmo762sukwau7.png"></a></td>` : ''}
-                            ${ig ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${ig}" target="_blank" rel="noreferrer"><img alt="instagram" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484206/bl76hrgjxdg99ybaunlq.png"></a></td>` : ''}
-                            ${linkedin ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${linkedin}" target="_blank" rel="noreferrer"><img alt="linkedin" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484555/LINKDIN_gxbk2t.png"></a></td>` : ''}
-                            ${tt ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${tt}" target="_blank" rel="noreferrer"><img alt="tiktok" border="0" width="24" height="24" src="https://res.cloudinary.com/di3wwp9s0/image/upload/v1761226748/new_signature/tiktok_vm7vh4.png"></a></td>` : ''}
+                            ${fb ? `<td style="padding-right: 10px;"><a href="${fb}" target="_blank" rel="noreferrer"><img alt="facebook" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484158/omypyzelmo762sukwau7.png"></a></td>` : ''}
+                            ${ig ? `<td style="padding-right: 10px;"><a href="${ig}" target="_blank" rel="noreferrer"><img alt="instagram" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484206/bl76hrgjxdg99ybaunlq.png"></a></td>` : ''}
+                            ${linkedin ? `<td style="padding-right: 10px;"><a href="${linkedin}" target="_blank" rel="noreferrer"><img alt="linkedin" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484555/LINKDIN_gxbk2t.png"></a></td>` : ''}
+                            ${tt ? `<td style="padding-right: 10px;"><a href="${tt}" target="_blank" rel="noreferrer"><img alt="tiktok" border="0" width="24" height="24" src="https://res.cloudinary.com/di3wwp9s0/image/upload/v1761226748/new_signature/tiktok_vm7vh4.png"></a></td>` : ''}
                         </tr>
                     </tbody>
                 </table>
             `;
 
-            // Clean URLs & Phone schemes
             const cleanOfficeTel = 'tel:+1' + officePhone.replace(/\D/g, '');
             const cleanPhoneTel = 'tel:+1' + phone.replace(/\D/g, '');
             const cleanExtTel = 'tel:' + ext.trim();
             const cleanWebURL = web.startsWith('http') ? web : 'https://' + web;
 
-            // Assemble Full Signature Table
             const signatureHTML = `
                 <div>
                     <table id="zs-output-sig" border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse; width: 1100px;">
@@ -243,7 +304,6 @@
                                     <table id="inner-table" border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                         <tbody>
                                             <tr>
-                                                <!-- Company Logo -->
                                                 <td width="200" style="padding-right: 20px; vertical-align: top;">
                                                     <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                                         <tbody>
@@ -255,12 +315,8 @@
                                                         </tbody>
                                                     </table>
                                                 </td>
-
-                                                <!-- Vertical Divider Line -->
                                                 <td style="border-collapse: collapse; background-color: rgb(28, 52, 97); width: 2px; vertical-align: super;"></td>
                                                 <td style="border-collapse: collapse; padding-right: 20px;"></td>
-
-                                                <!-- Contact Information Block -->
                                                 <td>
                                                     <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                                         <tbody>
@@ -345,10 +401,9 @@
             document.getElementById('signature-preview').innerHTML = signatureHTML;
         }
 
-        // Copies the rendered HTML structure to clipboard preserving tables and fonts
+        // Copy rich HTML directly to clipboard
         async function copySignature() {
             const previewEl = document.getElementById('signature-preview');
-            
             try {
                 const htmlBlob = new Blob([previewEl.innerHTML], { type: 'text/html' });
                 const textBlob = new Blob([previewEl.innerText], { type: 'text/plain' });
@@ -359,7 +414,6 @@
                 await navigator.clipboard.write([clipboardItem]);
                 alert("Signature copied to clipboard! Paste it directly into Gmail's signature settings.");
             } catch (err) {
-                // Fallback for older browsers
                 const range = document.createRange();
                 range.selectNode(previewEl);
                 const selection = window.getSelection();
@@ -371,9 +425,8 @@
             }
         }
 
-        // Initialize on load
         window.onload = function() {
-            initOfficeInputs();
+            renderOfficeInputs();
             renderSignature();
         };
     </script>
