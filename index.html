@@ -4,161 +4,464 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Signature Generator</title>
-    <!-- Google Web Fonts for Cursive Signature Styles -->
+    <!-- Google Web Fonts for Signature Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background-color: #f0f2f5; height: 100vh; color: #333; }
-        .sidebar { width: 480px; min-width: 480px; background: #ffffff; padding: 24px; box-shadow: 2px 0 10px rgba(0,0,0,0.06); overflow-y: auto; height: 100vh; }
-        .sidebar h2 { font-size: 20px; color: #1c3461; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #e47825; padding-bottom: 8px; }
-        
-        .section-title { font-size: 13px; font-weight: 700; color: #1c3461; text-transform: uppercase; letter-spacing: 0.6px; margin: 22px 0 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #555; }
-        .form-group input[type="text"], .form-group input[type="email"], .form-group select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #1c3461; }
-        
-        /* Dynamic Location Cards */
-        .location-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px; position: relative; display: flex; flex-direction: column; gap: 8px; }
-        .location-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-        .location-card-header .card-title { font-size: 12px; font-weight: 700; color: #1c3461; }
-        .btn-delete { background: none; border: none; color: #dc2626; font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px; line-height: 1; transition: background 0.1s; }
-        .btn-delete:hover { background-color: #fee2e2; }
-        
-        .location-inputs { display: flex; gap: 8px; }
-        .location-inputs .col-label { flex: 1; }
-        .location-inputs .col-address { flex: 2; }
-        .location-card input[type="text"] { width: 100%; padding: 7px 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; }
-        
-        .btn-add-location { background-color: #f1f5f9; color: #1c3461; border: 1px dashed #94a3b8; width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px;}
-        .btn-add-location:hover { background-color: #e2e8f0; border-color: #64748b; }
+        :root {
+            --brand-primary: #1c3461;
+            --brand-accent: #e47825;
+            --bg-canvas: #f8fafc;
+            --surface-card: #ffffff;
+            --border-subtle: #e2e8f0;
+            --border-focus: #1c3461;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --radius-md: 8px;
+            --radius-sm: 6px;
+        }
 
-        .toggle-group { display: flex; align-items: center; gap: 8px; margin: 12px 0; font-size: 13px; font-weight: 600; color: #1c3461; }
-        .main-content { flex: 1; padding: 30px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
-        .preview-card { background: #fff; padding: 35px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; max-width: 980px; overflow-x: auto; }
-        .btn-copy { background: #1c3461; color: #fff; border: none; padding: 13px 26px; font-size: 15px; border-radius: 5px; cursor: pointer; margin-top: 25px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
-        .btn-copy:hover { background: #132444; }
-        .instructions-card { margin-top: 25px; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; max-width: 980px; font-size: 14px; line-height: 1.6; }
-        .instructions-card h4 { color: #e47825; margin-top: 0; font-size: 16px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 480px;
+            min-width: 480px;
+            background: var(--surface-card);
+            border-right: 1px solid var(--border-subtle);
+            height: 100vh;
+            overflow-y: auto;
+            padding: 28px 24px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .brand-header {
+            border-bottom: 2px solid var(--brand-accent);
+            padding-bottom: 12px;
+        }
+
+        .brand-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .brand-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .section-header {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--brand-primary);
+            margin: 12px 0 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-heading);
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--text-heading);
+            background: #fff;
+            transition: all 0.15s ease-in-out;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(28, 52, 97, 0.1);
+        }
+
+        /* Stacked Address Card Component */
+        .location-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: border-color 0.15s ease;
+        }
+
+        .location-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .location-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .location-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-remove {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: background-color 0.15s;
+        }
+
+        .btn-remove:hover {
+            background-color: #fee2e2;
+        }
+
+        .location-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .location-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .location-field input {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            background: #ffffff;
+            color: var(--text-heading);
+            font-family: inherit;
+        }
+
+        .location-field input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(28, 52, 97, 0.1);
+        }
+
+        .btn-add-location {
+            background-color: #ffffff;
+            color: var(--brand-primary);
+            border: 1.5px dashed #94a3b8;
+            width: 100%;
+            padding: 11px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease-in-out;
+            margin-top: 4px;
+        }
+
+        .btn-add-location:hover {
+            background-color: #f1f5f9;
+            border-color: var(--brand-primary);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-heading);
+        }
+
+        .toggle-container input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--brand-primary);
+            cursor: pointer;
+        }
+
+        /* Preview Canvas */
+        .main-content {
+            flex: 1;
+            padding: 36px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            gap: 24px;
+        }
+
+        .preview-wrapper {
+            background: #ffffff;
+            padding: 36px;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 960px;
+            overflow-x: auto;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .preview-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--brand-primary);
+        }
+
+        .btn-action-copy {
+            background: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.15s ease, transform 0.05s ease;
+            box-shadow: 0 2px 4px rgba(28, 52, 97, 0.15);
+            margin-top: 24px;
+        }
+
+        .btn-action-copy:hover {
+            background: #122240;
+        }
+
+        .btn-action-copy:active {
+            transform: scale(0.99);
+        }
+
+        /* Instructions Container */
+        .guide-wrapper {
+            background: #ffffff;
+            padding: 24px 28px;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+            width: 100%;
+            max-width: 960px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .guide-wrapper h3 {
+            color: var(--brand-accent);
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .guide-wrapper ol {
+            padding-left: 20px;
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: var(--text-body);
+        }
+
+        .guide-wrapper strong {
+            color: var(--text-heading);
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Control Panel -->
+    <!-- Left Controls Panel -->
     <div class="sidebar">
-        <h2>Signature Generator</h2>
-
-        <div class="section-title">Personal Details</div>
-        <div class="form-group">
-            <label>Name</label>
-            <input type="text" id="inp-name" value="D-M-Ahnaf-Ahmed-Porag" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>Name Font Style</label>
-            <select id="inp-font-style" onchange="renderSignature()">
-                <option value="cursive-brush">Cursive (Brush Script / Native)</option>
-                <option value="cursive-dancing">Cursive (Dancing Script)</option>
-                <option value="cursive-vibes">Cursive (Calligraphy)</option>
-                <option value="standard">Standard Bold</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Job Title</label>
-            <input type="text" id="inp-title" value="Billing Coordinator" oninput="renderSignature()">
+        <div class="brand-header">
+            <h1>Signature Builder</h1>
+            <p>Customize and generate your official email signature.</p>
         </div>
 
-        <div class="section-title">Contact Numbers</div>
-        <div class="form-group">
-            <label>Office Phone</label>
-            <input type="text" id="inp-office" value="516-367-2266" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>Mobile / Direct Phone</label>
-            <input type="text" id="inp-phone" value="(347) 558-4484" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>Extension</label>
-            <input type="text" id="inp-ext" value="1151" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>Fax</label>
-            <input type="text" id="inp-fax" value="516-367-1067" oninput="renderSignature()">
-        </div>
-
-        <div class="section-title">Web & Communications</div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="inp-email" value="porag@cottagehomecare.com" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>Website Display URL</label>
-            <input type="text" id="inp-web" value="riversideselect.com" oninput="renderSignature()">
-        </div>
-
-        <!-- Dynamic Addresses Area -->
-        <div class="section-title">
-            <span>Office Locations</span>
-        </div>
-        <div id="office-list"></div>
-        <button type="button" class="btn-add-location" onclick="addLocation()">+ Add Address</button>
-
-        <div class="section-title">Social Media Links</div>
-        <div class="form-group">
-            <label>Facebook URL</label>
-            <input type="text" id="inp-fb" value="https://www.facebook.com/cottagehomecareservicesusa" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>Instagram URL</label>
-            <input type="text" id="inp-ig" value="https://www.instagram.com/cottage.homecare/" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>LinkedIn URL</label>
-            <input type="text" id="inp-in" value="https://www.linkedin.com/company/cottage-homecare/" oninput="renderSignature()">
-        </div>
-        <div class="form-group">
-            <label>TikTok URL</label>
-            <input type="text" id="inp-tt" value="https://www.tiktok.com/@cottage.homecare" oninput="renderSignature()">
-        </div>
-
-        <div class="section-title">Options</div>
-        <div class="toggle-group">
-            <input type="checkbox" id="inp-hipaa" checked onchange="renderSignature()">
-            <label for="inp-hipaa">Include HIPAA Privacy Notice</label>
-        </div>
-    </div>
-
-    <!-- Main Output / Preview -->
-    <div class="main-content">
-        <div class="preview-card">
-            <h3 style="margin: 0 0 15px; color: #1c3461;">Live Preview</h3>
-            
-            <div id="signature-preview">
-                <!-- Signature Table Renders Here -->
+        <div>
+            <div class="section-header">Personal Information</div>
+            <div class="form-group">
+                <label for="inp-name">Full Name</label>
+                <input type="text" id="inp-name" value="D-M-Ahnaf-Ahmed-Porag" oninput="renderSignature()">
             </div>
+            <div class="form-group">
+                <label for="inp-font-style">Signature Typography</label>
+                <select id="inp-font-style" onchange="renderSignature()">
+                    <option value="cursive-brush">Cursive (Brush Script / Native)</option>
+                    <option value="cursive-dancing">Cursive (Dancing Script)</option>
+                    <option value="cursive-vibes">Cursive (Calligraphy)</option>
+                    <option value="standard">Standard Bold</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="inp-title">Job Title</label>
+                <input type="text" id="inp-title" value="Billing Coordinator" oninput="renderSignature()">
+            </div>
+        </div>
 
-            <button class="btn-copy" onclick="copySignature()">
-                📋 Copy Signature for Gmail
+        <div>
+            <div class="section-header">Phone Lines</div>
+            <div class="form-group">
+                <label for="inp-office">Office Telephone</label>
+                <input type="text" id="inp-office" value="516-367-2266" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-phone">Direct / Mobile Line</label>
+                <input type="text" id="inp-phone" value="(347) 558-4484" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-ext">Extension</label>
+                <input type="text" id="inp-ext" value="1151" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-fax">Fax</label>
+                <input type="text" id="inp-fax" value="516-367-1067" oninput="renderSignature()">
+            </div>
+        </div>
+
+        <div>
+            <div class="section-header">Online Presence</div>
+            <div class="form-group">
+                <label for="inp-email">Email Address</label>
+                <input type="email" id="inp-email" value="porag@cottagehomecare.com" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-web">Website</label>
+                <input type="text" id="inp-web" value="riversideselect.com" oninput="renderSignature()">
+            </div>
+        </div>
+
+        <!-- Fully Stacked Dynamic Addresses -->
+        <div>
+            <div class="section-header">Branch Locations</div>
+            <div id="office-list"></div>
+            <button type="button" class="btn-add-location" onclick="addLocation()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add Address
             </button>
         </div>
 
-        <div class="instructions-card">
-            <h4>Instructions: Applying to Gmail</h4>
+        <div>
+            <div class="section-header">Social Media Channels</div>
+            <div class="form-group">
+                <label for="inp-fb">Facebook Profile URL</label>
+                <input type="text" id="inp-fb" value="https://www.facebook.com/cottagehomecareservicesusa" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-ig">Instagram Profile URL</label>
+                <input type="text" id="inp-ig" value="https://www.instagram.com/cottage.homecare/" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-in">LinkedIn Profile URL</label>
+                <input type="text" id="inp-in" value="https://www.linkedin.com/company/cottage-homecare/" oninput="renderSignature()">
+            </div>
+            <div class="form-group">
+                <label for="inp-tt">TikTok Profile URL</label>
+                <input type="text" id="inp-tt" value="https://www.tiktok.com/@cottage.homecare" oninput="renderSignature()">
+            </div>
+        </div>
+
+        <div>
+            <div class="section-header">Compliance</div>
+            <label class="toggle-container" for="inp-hipaa">
+                <input type="checkbox" id="inp-hipaa" checked onchange="renderSignature()">
+                Include HIPAA Privacy Notice
+            </label>
+        </div>
+    </div>
+
+    <!-- Main Preview Area -->
+    <div class="main-content">
+        <div class="preview-wrapper">
+            <div class="preview-header">
+                <h2>Live Signature Preview</h2>
+            </div>
+            
+            <div id="signature-preview">
+                <!-- Signature structure renders here -->
+            </div>
+
+            <button type="button" class="btn-action-copy" onclick="copySignature()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Signature to Clipboard
+            </button>
+        </div>
+
+        <div class="guide-wrapper">
+            <h3>How to add this signature to Gmail</h3>
             <ol>
-                <li>Update your personal contact details. Use <strong>"+ Add Address"</strong> to include new offices, or <strong>"✕"</strong> to remove addresses you don't need.</li>
-                <li>Click <strong>"Copy Signature for Gmail"</strong>.</li>
-                <li>Open <strong>Gmail</strong>, click the <strong>Gear icon</strong> (Settings) &rarr; <strong>"See all settings"</strong>.</li>
-                <li>Under the <strong>General</strong> tab, scroll down to the <strong>Signature</strong> section.</li>
-                <li>Click <strong>"Create new"</strong> (or select an existing signature) and press <strong>Ctrl+V</strong> (or <strong>Cmd+V</strong> on Mac) into the editor box.</li>
-                <li>Scroll to the bottom and click <strong>"Save Changes"</strong>.</li>
+                <li>Fill in your credentials and adjust the stacked office locations as needed.</li>
+                <li>Click the <strong>Copy Signature to Clipboard</strong> button.</li>
+                <li>Open <strong>Gmail</strong> and click the <strong>Settings icon</strong> (top right gear) &rarr; <strong>See all settings</strong>.</li>
+                <li>Scroll down to the <strong>Signature</strong> section under the General tab.</li>
+                <li>Create a new signature (or edit an existing one), click inside the text editor box, and press <strong>Ctrl+V</strong> (or <strong>Cmd+V</strong> on Mac).</li>
+                <li>Scroll to the bottom of the Gmail screen and click <strong>Save Changes</strong>.</li>
             </ol>
         </div>
     </div>
 
     <script>
-        // Preset addresses matching the placeholder template
+        // Default addresses populated from the original placeholder template
         let officeLocations = [
             { id: 1, label: "Freeport Office", address: "294 West Merrick Road, Suite 12 freeport NY,11520" },
             { id: 2, label: "Queens Office", address: "126-01 Liberty Avenue, South Richmond Hill Queens, New York 11419" },
@@ -169,7 +472,7 @@
             { id: 7, label: "Michigan Office", address: "150 W Jefferson Ave, Suite P307, Detroit,MI, 48226 United States" }
         ];
 
-        // Render editable cards in the sidebar
+        // Renders vertical, fully stacked address items in the sidebar
         function renderOfficeInputs() {
             const container = document.getElementById('office-list');
             container.innerHTML = '';
@@ -179,23 +482,25 @@
                 card.className = 'location-card';
                 card.innerHTML = `
                     <div class="location-card-header">
-                        <span class="card-title">Address ${index + 1}</span>
-                        <button type="button" class="btn-delete" title="Remove address" onclick="deleteOffice(${index})">✕</button>
+                        <span class="location-badge">Location ${index + 1}</span>
+                        <button type="button" class="btn-remove" title="Remove this address" onclick="deleteOffice(${index})">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            Remove
+                        </button>
                     </div>
-                    <div class="location-inputs">
-                        <div class="col-label">
-                            <input type="text" value="${office.label}" placeholder="Label (e.g. Dallas Office)" oninput="updateOfficeLabel(${index}, this.value)">
-                        </div>
-                        <div class="col-address">
-                            <input type="text" value="${office.address}" placeholder="Full Address" oninput="updateOfficeAddress(${index}, this.value)">
-                        </div>
+                    <div class="location-field">
+                        <label>Office Name</label>
+                        <input type="text" value="${office.label}" placeholder="e.g., Freeport Office" oninput="updateOfficeLabel(${index}, this.value)">
+                    </div>
+                    <div class="location-field">
+                        <label>Full Address</label>
+                        <input type="text" value="${office.address}" placeholder="Street, Suite, City, State, ZIP" oninput="updateOfficeAddress(${index}, this.value)">
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // Add a new empty location card
         function addLocation() {
             officeLocations.push({
                 id: Date.now(),
@@ -206,14 +511,12 @@
             renderSignature();
         }
 
-        // Delete a location card
         function deleteOffice(index) {
             officeLocations.splice(index, 1);
             renderOfficeInputs();
             renderSignature();
         }
 
-        // Update handlers
         function updateOfficeLabel(index, val) {
             officeLocations[index].label = val;
             renderSignature();
@@ -224,7 +527,6 @@
             renderSignature();
         }
 
-        // Render full signature table
         function renderSignature() {
             const name = document.getElementById('inp-name').value;
             const fontStyle = document.getElementById('inp-font-style').value;
@@ -241,7 +543,7 @@
             const tt = document.getElementById('inp-tt').value;
             const showHipaa = document.getElementById('inp-hipaa').checked;
 
-            // Name styling
+            // Compute Typography Styles
             let nameFontCSS = "font-family: 'Brush Script MT', 'Dancing Script', 'Segoe Script', cursive; font-size: 27px; line-height: 29px; font-weight: 600;";
             if (fontStyle === 'cursive-dancing') {
                 nameFontCSS = "font-family: 'Dancing Script', 'Brush Script MT', cursive; font-size: 26px; line-height: 28px; font-weight: 700;";
@@ -251,7 +553,7 @@
                 nameFontCSS = "font-family: sans-serif; font-size: 20px; line-height: 22px; font-weight: 700;";
             }
 
-            // Build active addresses
+            // Generate Address Table Rows
             let officeRowsHTML = "";
             const activeOffices = officeLocations.filter(o => o.address.trim() !== "");
             
@@ -260,8 +562,9 @@
                 const paddingBottom = isLast ? "padding-bottom: 14px;" : "";
                 const mapURL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.address)}`;
                 
-                // If label is empty, just don't show the bold prefix
-                const labelHTML = office.label.trim() ? `<span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">${office.label}:</span>` : '';
+                const labelHTML = office.label.trim() 
+                    ? `<span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">${office.label}:</span>` 
+                    : '';
                 const marginLeft = office.label.trim() ? "margin-left: 2px;" : "";
 
                 officeRowsHTML += `
@@ -276,7 +579,7 @@
                 `;
             });
 
-            // Social icons
+            // Social Media Icons
             const socialBadgesHTML = `
                 <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                     <tbody>
@@ -295,6 +598,7 @@
             const cleanExtTel = 'tel:' + ext.trim();
             const cleanWebURL = web.startsWith('http') ? web : 'https://' + web;
 
+            // Generate Complete Email Client Table Structure
             const signatureHTML = `
                 <div>
                     <table id="zs-output-sig" border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse; width: 1100px;">
@@ -401,7 +705,7 @@
             document.getElementById('signature-preview').innerHTML = signatureHTML;
         }
 
-        // Copy rich HTML directly to clipboard
+        // Cross-browser HTML clipboard writer
         async function copySignature() {
             const previewEl = document.getElementById('signature-preview');
             try {
@@ -412,7 +716,7 @@
                     'text/plain': textBlob
                 });
                 await navigator.clipboard.write([clipboardItem]);
-                alert("Signature copied to clipboard! Paste it directly into Gmail's signature settings.");
+                alert("Signature copied to clipboard! Paste it directly into your Gmail settings.");
             } catch (err) {
                 const range = document.createRange();
                 range.selectNode(previewEl);
