@@ -9,107 +9,247 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; margin: 0; background-color: #f4f7f6; height: 100vh; }
-        .sidebar { width: 360px; background: #fff; padding: 25px; box-shadow: 2px 0 8px rgba(0,0,0,0.08); overflow-y: auto; }
-        .sidebar h2 { font-size: 19px; color: #1c3461; border-bottom: 2px solid #e47825; padding-bottom: 10px; margin-top: 0; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #444; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input, .form-group select { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; margin: 0; background-color: #f0f2f5; height: 100vh; color: #333; }
+        .sidebar { width: 440px; background: #ffffff; padding: 24px; box-shadow: 2px 0 10px rgba(0,0,0,0.06); overflow-y: auto; height: 100vh; }
+        .sidebar h2 { font-size: 20px; color: #1c3461; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #e47825; padding-bottom: 8px; }
+        .section-title { font-size: 13px; font-weight: 700; color: #1c3461; text-transform: uppercase; letter-spacing: 0.6px; margin: 20px 0 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #555; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #1c3461; ring: 2px solid #1c3461; }
+        .location-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px; }
+        .location-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .location-header label { font-size: 12px; font-weight: 700; color: #1c3461; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .location-item input[type="text"] { width: 100%; padding: 6px 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; }
+        .toggle-group { display: flex; align-items: center; gap: 8px; margin: 12px 0; font-size: 13px; font-weight: 600; color: #1c3461; }
         .main-content { flex: 1; padding: 30px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
-        .preview-container { background: #fff; padding: 35px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 100%; max-width: 950px; overflow-x: auto; box-sizing: border-box; }
-        .preview-container h3 { margin-top: 0; color: #1c3461; }
-        .btn-copy { background: #1c3461; color: #fff; border: none; padding: 13px 28px; font-size: 15px; border-radius: 4px; cursor: pointer; margin-top: 25px; font-weight: 600; transition: background 0.2s; }
-        .btn-copy:hover { background: #122240; }
-        .instructions-box { margin-top: 25px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 100%; max-width: 950px; line-height: 1.6; font-size: 14px; box-sizing: border-box; }
-        .instructions-box h4 { color: #e47825; margin-top: 0; font-size: 16px; }
+        .preview-card { background: #fff; padding: 35px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; max-width: 980px; overflow-x: auto; }
+        .btn-copy { background: #1c3461; color: #fff; border: none; padding: 13px 26px; font-size: 15px; border-radius: 5px; cursor: pointer; margin-top: 25px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-copy:hover { background: #132444; }
+        .instructions-card { margin-top: 25px; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; max-width: 980px; font-size: 14px; line-height: 1.6; }
+        .instructions-card h4 { color: #e47825; margin-top: 0; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <!-- Configuration Sidebar -->
+    <!-- Configuration Panel -->
     <div class="sidebar">
-        <h2>Signature Details</h2>
-        
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="inp-name" value="Ahnaf Ahmed Porag" oninput="updateSignature()">
-        </div>
+        <h2>Signature Generator</h2>
 
+        <div class="section-title">Personal Details</div>
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="inp-name" value="D-M-Ahnaf-Ahmed-Porag" oninput="renderSignature()">
+        </div>
         <div class="form-group">
             <label>Name Font Style</label>
-            <select id="inp-font-style" onchange="updateSignature()">
+            <select id="inp-font-style" onchange="renderSignature()">
                 <option value="cursive-brush">Cursive (Brush Script / Native)</option>
                 <option value="cursive-dancing">Cursive (Dancing Script)</option>
-                <option value="cursive-vibes">Cursive (Calligraphy / Elegant)</option>
-                <option value="sans">Standard Bold (Sans-Serif)</option>
+                <option value="cursive-vibes">Cursive (Calligraphy)</option>
+                <option value="standard">Standard Bold</option>
             </select>
         </div>
-
         <div class="form-group">
             <label>Job Title</label>
-            <input type="text" id="inp-title" value="Billing Coordinator" oninput="updateSignature()">
+            <input type="text" id="inp-title" value="Billing Coordinator" oninput="renderSignature()">
         </div>
 
+        <div class="section-title">Contact Numbers</div>
         <div class="form-group">
-            <label>Direct Phone</label>
-            <input type="text" id="inp-phone" value="(347) 558-4484" oninput="updateSignature()">
+            <label>Office Phone</label>
+            <input type="text" id="inp-office" value="516-367-2266" oninput="renderSignature()">
         </div>
-
+        <div class="form-group">
+            <label>Mobile / Direct Phone</label>
+            <input type="text" id="inp-phone" value="(347) 558-4484" oninput="renderSignature()">
+        </div>
         <div class="form-group">
             <label>Extension</label>
-            <input type="text" id="inp-ext" value="1151" oninput="updateSignature()">
+            <input type="text" id="inp-ext" value="1151" oninput="renderSignature()">
         </div>
-
-        <div class="form-group">
-            <label>Office Line</label>
-            <input type="text" id="inp-office" value="516-367-2266" oninput="updateSignature()">
-        </div>
-
         <div class="form-group">
             <label>Fax</label>
-            <input type="text" id="inp-fax" value="516-367-1067" oninput="updateSignature()">
+            <input type="text" id="inp-fax" value="516-367-1067" oninput="renderSignature()">
         </div>
 
+        <div class="section-title">Web & Communications</div>
         <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="inp-email" value="porag@cottagehomecare.com" oninput="updateSignature()">
+            <label>Email</label>
+            <input type="email" id="inp-email" value="porag@cottagehomecare.com" oninput="renderSignature()">
+        </div>
+        <div class="form-group">
+            <label>Website Display Text / URL</label>
+            <input type="text" id="inp-web" value="riversideselect.com" oninput="renderSignature()">
         </div>
 
+        <div class="section-title">Office Locations (Toggle & Edit)</div>
+        <div id="office-inputs-container"></div>
+
+        <div class="section-title">Social Media Links</div>
         <div class="form-group">
-            <label>Website URL</label>
-            <input type="text" id="inp-web" value="riversideselect.com" oninput="updateSignature()">
+            <label>Facebook URL</label>
+            <input type="text" id="inp-fb" value="https://www.facebook.com/cottagehomecareservicesusa" oninput="renderSignature()">
+        </div>
+        <div class="form-group">
+            <label>Instagram URL</label>
+            <input type="text" id="inp-ig" value="https://www.instagram.com/cottage.homecare/" oninput="renderSignature()">
+        </div>
+        <div class="form-group">
+            <label>LinkedIn URL</label>
+            <input type="text" id="inp-in" value="https://www.linkedin.com/company/cottage-homecare/" oninput="renderSignature()">
+        </div>
+        <div class="form-group">
+            <label>TikTok URL</label>
+            <input type="text" id="inp-tt" value="https://www.tiktok.com/@cottage.homecare" oninput="renderSignature()">
+        </div>
+
+        <div class="section-title">Options</div>
+        <div class="toggle-group">
+            <input type="checkbox" id="inp-hipaa" checked onchange="renderSignature()">
+            <label for="inp-hipaa">Include HIPAA Privacy Notice</label>
         </div>
     </div>
 
-    <!-- Main Output & Preview Viewport -->
+    <!-- Live Preview Viewport -->
     <div class="main-content">
-        <div class="preview-container">
-            <h3>Live Signature Preview</h3>
-            <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 25px;">
+        <div class="preview-card">
+            <h3 style="margin: 0 0 15px; color: #1c3461;">Live Preview</h3>
             
-            <!-- Email Signature Container -->
             <div id="signature-preview">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <button class="btn-copy" onclick="copySignature()">
+                📋 Copy Signature for Gmail
+            </button>
+        </div>
+
+        <div class="instructions-card">
+            <h4>Instructions: Applying to Gmail</h4>
+            <ol>
+                <li>Customize your personal contact info and check or uncheck which office locations you need.</li>
+                <li>Click <strong>"Copy Signature for Gmail"</strong>.</li>
+                <li>Open <strong>Gmail</strong>, click the <strong>Gear icon</strong> (Settings) &rarr; <strong>"See all settings"</strong>.</li>
+                <li>Under the <strong>General</strong> tab, scroll down to the <strong>Signature</strong> section.</li>
+                <li>Click <strong>"Create new"</strong> (or select your existing signature) and press <strong>Ctrl+V</strong> (or <strong>Cmd+V</strong> on Mac) into the editor box.</li>
+                <li>Scroll to the bottom of the page and click <strong>"Save Changes"</strong>.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Preset office data from the original template
+        const initialOffices = [
+            { id: "freeport", label: "Freeport Office", address: "294 West Merrick Road, Suite 12 Freeport NY, 11520", enabled: true },
+            { id: "queens", label: "Queens Office", address: "126-01 Liberty Avenue, South Richmond Hill Queens, New York 11419", enabled: true },
+            { id: "nj", label: "New Jersey Office", address: "97 Newkirk St STE 337, Jersey City, NJ 07306", enabled: true },
+            { id: "md", label: "Maryland Office", address: "6310 Stevens Forest Rd, Suite 100, Columbia, MD 21046", enabled: true },
+            { id: "miami", label: "Miami Office", address: "1380 NE Miami Garden Drive Suite 140-C Miami, FL 33179", enabled: true },
+            { id: "ct", label: "Connecticut Office", address: "510 Tolland St, STE #203 East Hartford, CT 06108", enabled: true },
+            { id: "mi", label: "Michigan Office", address: "150 W Jefferson Ave, Suite P307, Detroit, MI, 48226 United States", enabled: true }
+        ];
+
+        // Build sidebar office inputs
+        function initOfficeInputs() {
+            const container = document.getElementById('office-inputs-container');
+            container.innerHTML = initialOffices.map((office, idx) => `
+                <div class="location-item">
+                    <div class="location-header">
+                        <label for="chk-office-${idx}">
+                            <input type="checkbox" id="chk-office-${idx}" ${office.enabled ? 'checked' : ''} onchange="renderSignature()">
+                            ${office.label}
+                        </label>
+                    </div>
+                    <input type="text" id="txt-office-${idx}" value="${office.address}" oninput="renderSignature()" placeholder="Office address">
+                </div>
+            `).join('');
+        }
+
+        function renderSignature() {
+            const name = document.getElementById('inp-name').value;
+            const fontStyle = document.getElementById('inp-font-style').value;
+            const title = document.getElementById('inp-title').value;
+            const officePhone = document.getElementById('inp-office').value;
+            const phone = document.getElementById('inp-phone').value;
+            const ext = document.getElementById('inp-ext').value;
+            const fax = document.getElementById('inp-fax').value;
+            const email = document.getElementById('inp-email').value;
+            const web = document.getElementById('inp-web').value;
+            const fb = document.getElementById('inp-fb').value;
+            const ig = document.getElementById('inp-ig').value;
+            const linkedin = document.getElementById('inp-in').value;
+            const tt = document.getElementById('inp-tt').value;
+            const showHipaa = document.getElementById('inp-hipaa').checked;
+
+            // Compute font styling for cursive name
+            let nameFontCSS = "font-family: 'Brush Script MT', 'Dancing Script', 'Segoe Script', cursive; font-size: 27px; line-height: 29px; font-weight: 600;";
+            if (fontStyle === 'cursive-dancing') {
+                nameFontCSS = "font-family: 'Dancing Script', 'Brush Script MT', cursive; font-size: 26px; line-height: 28px; font-weight: 700;";
+            } else if (fontStyle === 'cursive-vibes') {
+                nameFontCSS = "font-family: 'Great Vibes', 'Lucida Handwriting', cursive; font-size: 30px; line-height: 32px; font-weight: 500;";
+            } else if (fontStyle === 'standard') {
+                nameFontCSS = "font-family: sans-serif; font-size: 20px; line-height: 22px; font-weight: 700;";
+            }
+
+            // Build active office table rows
+            let officeRowsHTML = "";
+            initialOffices.forEach((office, idx) => {
+                const isChecked = document.getElementById(`chk-office-${idx}`).checked;
+                const addr = document.getElementById(`txt-office-${idx}`).value.trim();
+                if (isChecked && addr) {
+                    const mapURL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`;
+                    officeRowsHTML += `
+                        <tr>
+                            <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600;">
+                                <p style="margin: 0.04px;">
+                                    <span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">${office.label}:</span>
+                                    <a href="${mapURL}" target="_blank" rel="noreferrer" style="text-decoration: none; font-family: sans-serif; font-size: 15px; margin-left: 2px; font-style: normal; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${addr}</a>
+                                </p>
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+
+            // Social media badges
+            const socialBadgesHTML = `
+                <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
+                    <tbody>
+                        <tr>
+                            ${fb ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${fb}" target="_blank" rel="noreferrer"><img alt="facebook" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484158/omypyzelmo762sukwau7.png"></a></td>` : ''}
+                            ${ig ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${ig}" target="_blank" rel="noreferrer"><img alt="instagram" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484206/bl76hrgjxdg99ybaunlq.png"></a></td>` : ''}
+                            ${linkedin ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${linkedin}" target="_blank" rel="noreferrer"><img alt="linkedin" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484555/LINKDIN_gxbk2t.png"></a></td>` : ''}
+                            ${tt ? `<td style="padding-top: 14px; padding-right: 10px;"><a href="${tt}" target="_blank" rel="noreferrer"><img alt="tiktok" border="0" width="24" height="24" src="https://res.cloudinary.com/di3wwp9s0/image/upload/v1761226748/new_signature/tiktok_vm7vh4.png"></a></td>` : ''}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+
+            // Clean URLs & Phone schemes
+            const cleanOfficeTel = 'tel:+1' + officePhone.replace(/\D/g, '');
+            const cleanPhoneTel = 'tel:+1' + phone.replace(/\D/g, '');
+            const cleanExtTel = 'tel:' + ext.trim();
+            const cleanWebURL = web.startsWith('http') ? web : 'https://' + web;
+
+            // Assemble Full Signature Table
+            const signatureHTML = `
                 <div>
-                    <table id="zs-output-sig" border="0" cellpadding="0" cellspacing="0"
-                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse; width: 1100px;">
+                    <table id="zs-output-sig" border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse; width: 1100px;">
                         <tbody>
                             <tr>
                                 <td>
-                                    <table id="inner-table" border="0" cellpadding="0" cellspacing="0"
-                                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
+                                    <table id="inner-table" border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                         <tbody>
                                             <tr>
-                                                <!-- Company Logo Column -->
+                                                <!-- Company Logo -->
                                                 <td width="200" style="padding-right: 20px; vertical-align: top;">
-                                                    <table border="0" cellpadding="0" cellspacing="0"
-                                                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
+                                                    <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                                         <tbody>
                                                             <tr>
                                                                 <td style="border-collapse: collapse; line-height: 0px; padding-right: 1px;">
-                                                                    <p style="margin: 0.04px;"><img alt="Company Logo" border="0"
-                                                                            loading="lazy" width="200" height="70" decoding="async"
-                                                                            src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484130/yqibiarsvmp5s9fcddqq.png"
-                                                                            style="color: transparent; display: block;"></p>
+                                                                    <p style="margin: 0.04px;"><img alt="Company Logo" border="0" width="200" height="70" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484130/yqibiarsvmp5s9fcddqq.png" style="color: transparent; display: block;"></p>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -120,126 +260,70 @@
                                                 <td style="border-collapse: collapse; background-color: rgb(28, 52, 97); width: 2px; vertical-align: super;"></td>
                                                 <td style="border-collapse: collapse; padding-right: 20px;"></td>
 
-                                                <!-- Employee & Contact Data -->
+                                                <!-- Contact Information Block -->
                                                 <td>
-                                                    <table border="0" cellpadding="0" cellspacing="0"
-                                                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
+                                                    <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                                         <tbody>
-                                                            <!-- Dynamic Cursive Name Field -->
                                                             <tr>
                                                                 <td style="border-collapse: collapse; padding-bottom: 2px;">
-                                                                    <p id="prev-name" style="margin: 0px; font-family: 'Brush Script MT', 'Dancing Script', 'Segoe Script', cursive; font-size: 27px; line-height: 30px; font-weight: 600; color: rgb(28, 52, 97);">
-                                                                        Ahnaf Ahmed Porag
-                                                                    </p>
+                                                                    <p style="margin: 0.04px; color: rgb(28, 52, 97); ${nameFontCSS}">${name}</p>
                                                                 </td>
                                                             </tr>
-                                                            <!-- Job Title -->
                                                             <tr>
-                                                                <td style="border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; padding-top: 3px; line-height: 17px; font-weight: 700;">
-                                                                    <p style="margin: 0.04px;"><span id="prev-title"
-                                                                            style="font-family: sans-serif; font-size: 18px; font-style: normal; font-weight: 700; line-height: 20px; color: rgb(28, 52, 97); display: inline;">Billing Coordinator</span>
-                                                                    </p>
+                                                                <td style="border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; padding-top: 4px; line-height: 17px; font-weight: 700;">
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 18px; font-style: normal; font-weight: 700; line-height: 18px; color: rgb(28, 52, 97); display: inline;">${title}</span></p>
                                                                 </td>
                                                             </tr>
-                                                            <!-- Company Branding -->
                                                             <tr>
                                                                 <td style="border-collapse: collapse; padding-top: 3px; padding-bottom: 6px; font-family: sans-serif; font-size: 15px; font-style: normal; font-weight: 700;">
-                                                                    <p style="margin: 0.04px;"><span
-                                                                            style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 18px; font-weight: 800; color: rgb(228, 120, 37); display: inline;">Riverside Select Services,
-                                                                            LLC <br>DBA <span style="color: rgb(28, 52, 97);">Cottage Homecare Services</span></span></p>
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 18px; font-weight: 800; color: rgb(228, 120, 37); display: inline;">Riverside Select Services, LLC <br>DBA <span style="color: rgb(28, 52, 97);">Cottage Homecare Services</span></span></p>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
 
-                                                    <!-- Phone & Numbers -->
-                                                    <table border="0" cellpadding="0" cellspacing="0"
-                                                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
+                                                    <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                                         <tbody>
+                                                            ${officePhone ? `
                                                             <tr>
                                                                 <td style="padding-top: 1px; border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 500;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Office:</span><a id="prev-office-link" href="tel:+15163672266" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);"><span id="prev-office">516-367-2266</span></a></p>
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">Office:</span><a href="${cleanOfficeTel}" style="text-decoration: none; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${officePhone}</a></p>
                                                                 </td>
-                                                            </tr>
+                                                            </tr>` : ''}
+                                                            ${phone ? `
                                                             <tr>
                                                                 <td style="padding-top: 1px; border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Phone:</span><a id="prev-phone-link" href="tel:+13475584484" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);"><span id="prev-phone">(347) 558-4484</span></a><span style="margin-left: 4px; font-weight: 600; color: rgb(28, 52, 97);">Ext:</span><a id="prev-ext-link" href="tel:1151" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);"><span id="prev-ext">1151</span></a></p>
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">Phone:</span><a href="${cleanPhoneTel}" style="text-decoration: none; font-family: sans-serif; font-size: 15px; margin-left: 2px; font-style: normal; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${phone}</a>${ext ? `<span style="font-family: sans-serif; font-size: 15px; margin-left: 4px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">Ext:</span><a href="${cleanExtTel}" style="text-decoration: none; font-family: sans-serif; font-size: 15px; margin-left: 2px; font-style: normal; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${ext}</a>` : ''}</p>
                                                                 </td>
-                                                            </tr>
+                                                            </tr>` : ''}
                                                         </tbody>
                                                     </table>
 
-                                                    <!-- Communications & Links -->
-                                                    <table border="0" cellpadding="0" cellspacing="0"
-                                                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
+                                                    <table border="0" cellpadding="0" cellspacing="0" style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
                                                         <tbody>
+                                                            ${fax ? `
                                                             <tr>
                                                                 <td style="padding-top: 1px; border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 500;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Fax:</span><span id="prev-fax" style="margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">516-367-1067</span></p>
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">Fax:</span><span style="font-family: sans-serif; font-size: 15px; margin-left: 2px; font-style: normal; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${fax}</span></p>
                                                                 </td>
-                                                            </tr>
+                                                            </tr>` : ''}
+                                                            ${email ? `
                                                             <tr>
                                                                 <td style="padding-top: 1px; border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 500;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Email:</span><a id="prev-email-link" href="mailto:porag@cottagehomecare.com" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);"><span id="prev-email">porag@cottagehomecare.com</span></a></p>
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">Email:</span><a href="mailto:${email}" style="text-decoration: none; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${email}</a></p>
                                                                 </td>
-                                                            </tr>
+                                                            </tr>` : ''}
+                                                            ${web ? `
                                                             <tr>
                                                                 <td style="padding-top: 1px; border-collapse: collapse; font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 500;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Web:</span><a id="prev-web-link" href="https://riversideselect.com" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);"><span id="prev-web">riversideselect.com</span></a></p>
+                                                                    <p style="margin: 0.04px;"><span style="font-family: sans-serif; font-size: 15px; font-style: normal; line-height: 17px; font-weight: 600; color: rgb(28, 52, 97); display: inline;">Web:</span><a href="${cleanWebURL}" target="_blank" rel="noreferrer" style="text-decoration: none; font-family: sans-serif; font-size: 15px; font-style: normal; margin-left: 2px; line-height: 17px; font-weight: 500; color: rgb(28, 52, 97); display: inline;">${web}</a></p>
                                                                 </td>
-                                                            </tr>
-
-                                                            <!-- Office Locations -->
-                                                            <tr>
-                                                                <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Freeport Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">294 West Merrick Road, Suite 12 Freeport NY, 11520</a></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Queens Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">126-01 Liberty Avenue, South Richmond Hill Queens, NY 11419</a></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">New Jersey Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">97 Newkirk St STE 337, Jersey City, NJ 07306</a></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Maryland Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">6310 Stevens Forest Rd, Suite 100, Columbia, MD 21046</a></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Miami Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">1380 NE Miami Garden Drive Suite 140-C Miami, FL 33179</a></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-top: 1px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Connecticut Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">510 Tolland St, STE #203 East Hartford, CT 06108</a></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-top: 1px; padding-bottom: 14px; border-collapse: collapse; font-family: Calibri, Helvetica, sans-serif; font-size: 15px; line-height: 17px;">
-                                                                    <p style="margin: 0.04px;"><span style="font-weight: 600; color: rgb(28, 52, 97);">Michigan Office:</span><a href="https://www.google.com/maps" target="_blank" style="text-decoration: none; margin-left: 2px; font-weight: 500; color: rgb(28, 52, 97);">150 W Jefferson Ave, Suite P307, Detroit, MI 48226</a></p>
-                                                                </td>
-                                                            </tr>
+                                                            </tr>` : ''}
+                                                            ${officeRowsHTML}
                                                         </tbody>
                                                     </table>
 
-                                                    <!-- Social Badges -->
-                                                    <table border="0" cellpadding="0" cellspacing="0"
-                                                        style="font-family: sans-serif; line-height: 0px; font-size: 1px; border-spacing: 0px; margin: 0px; border-collapse: collapse;">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="padding-right: 10px;"><a href="https://www.facebook.com/cottagehomecareservicesusa" target="_blank"><img alt="facebook" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484158/omypyzelmo762sukwau7.png"></a></td>
-                                                                <td style="padding-right: 10px;"><a href="https://www.instagram.com/cottage.homecare/" target="_blank"><img alt="instagram" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484206/bl76hrgjxdg99ybaunlq.png"></a></td>
-                                                                <td style="padding-right: 10px;"><a href="https://www.linkedin.com/company/cottage-homecare/" target="_blank"><img alt="linkedin" border="0" width="24" height="24" src="https://res.cloudinary.com/dlw7u1u5p/image/upload/v1728484555/LINKDIN_gxbk2t.png"></a></td>
-                                                                <td style="padding-right: 10px;"><a href="https://www.tiktok.com/@cottage.homecare" target="_blank"><img alt="tiktok" border="0" width="24" height="24" src="https://res.cloudinary.com/di3wwp9s0/image/upload/v1761226748/new_signature/tiktok_vm7vh4.png"></a></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                    ${socialBadgesHTML}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -250,95 +334,48 @@
                         </tbody>
                     </table>
 
-                    <!-- HIPAA Notice -->
-                    <div style="color: rgb(28, 52, 97); font-family: sans-serif;"><u style="font-size: 14px; font-weight: 600;">HIPAA PRIVACY NOTICE:</u><i
-                            style="margin-top: 2px; font-size: 14px; display: block; line-height: 18px;">This message and any attached file(s) may contain
-                            legally privileged and/or confidential information. If the reader of this message is not the intended
-                            recipient, an employee or an agent responsible for delivering this message to the intended recipient, you
-                            are hereby notified that any dissemination, distribution, or copying of this e-mail and the attachments
-                            hereto, if any, is strictly prohibited. If you have received this communication in error, please notify the
-                            sender immediately by telephone and/or replying to this message while also permanently deleting this email,
-                            and any attachments and shredding all printed copies thereof.</i></div>
+                    ${showHipaa ? `
+                    <div style="color: rgb(28, 52, 97); font-family: sans-serif; font-size: 14px; line-height: 18px; margin-top: 10px;">
+                        <u style="font-weight: 600;">HIPAA PRIVACY NOTICE:</u>
+                        <i style="margin-top: 2px; display: block;">This message and any attached file(s) may contain legally privileged and/or confidential information. If the reader of this message is not the intended recipient, an employee or an agent responsible for delivering this message to the intended recipient, you are hereby notified that any dissemination, distribution, or copying of this e-mail and the attachments hereto, if any, is strictly prohibited. If you have received this communication in error, please notify the sender immediately by telephone and/or replying to this message while also permanently deleting this email, and any attachments and shredding all printed copies thereof.</i>
+                    </div>` : ''}
                 </div>
-            </div>
-            
-            <button class="btn-copy" onclick="copySignature()">Copy Signature to Clipboard</button>
-        </div>
+            `;
 
-        <div class="instructions-box">
-            <h4>Instructions: Applying to Gmail</h4>
-            <ol>
-                <li>Type your details into the sidebar inputs. Choose your preferred cursive style in the dropdown.</li>
-                <li>Click <strong>"Copy Signature to Clipboard"</strong>.</li>
-                <li>Go to <strong>Gmail</strong>, click the <strong>Gear icon</strong> (Settings) &rarr; <strong>"See all settings"</strong>.</li>
-                <li>Scroll down to <strong>Signature</strong>, select or create your signature, and press <strong>Ctrl+V</strong> (or <strong>Cmd+V</strong>) into the signature field.</li>
-                <li>Scroll down and hit <strong>"Save Changes"</strong>.</li>
-            </ol>
-        </div>
-    </div>
-
-    <!-- Live Preview Script -->
-    <script>
-        function updateSignature() {
-            const name = document.getElementById('inp-name').value;
-            const fontStyle = document.getElementById('inp-font-style').value;
-            const nameEl = document.getElementById('prev-name');
-
-            nameEl.innerText = name;
-
-            // Apply selected font style
-            if (fontStyle === 'cursive-brush') {
-                nameEl.style.fontFamily = "'Brush Script MT', 'Dancing Script', 'Segoe Script', cursive";
-                nameEl.style.fontSize = "28px";
-                nameEl.style.fontWeight = "600";
-            } else if (fontStyle === 'cursive-dancing') {
-                nameEl.style.fontFamily = "'Dancing Script', 'Brush Script MT', cursive";
-                nameEl.style.fontSize = "26px";
-                nameEl.style.fontWeight = "700";
-            } else if (fontStyle === 'cursive-vibes') {
-                nameEl.style.fontFamily = "'Great Vibes', 'Lucida Handwriting', cursive";
-                nameEl.style.fontSize = "30px";
-                nameEl.style.fontWeight = "500";
-            } else {
-                nameEl.style.fontFamily = "sans-serif";
-                nameEl.style.fontSize = "20px";
-                nameEl.style.fontWeight = "700";
-            }
-
-            // Sync other text fields
-            document.getElementById('prev-title').innerText = document.getElementById('inp-title').value;
-            document.getElementById('prev-office').innerText = document.getElementById('inp-office').value;
-            document.getElementById('prev-phone').innerText = document.getElementById('inp-phone').value;
-            document.getElementById('prev-ext').innerText = document.getElementById('inp-ext').value;
-            document.getElementById('prev-fax').innerText = document.getElementById('inp-fax').value;
-            document.getElementById('prev-email').innerText = document.getElementById('inp-email').value;
-            document.getElementById('prev-web').innerText = document.getElementById('inp-web').value;
-
-            // Sync hyperlinked destinations
-            document.getElementById('prev-office-link').href = 'tel:+1' + document.getElementById('inp-office').value.replace(/\D/g, '');
-            document.getElementById('prev-phone-link').href = 'tel:+1' + document.getElementById('inp-phone').value.replace(/\D/g, '');
-            document.getElementById('prev-ext-link').href = 'tel:' + document.getElementById('inp-ext').value;
-            document.getElementById('prev-email-link').href = 'mailto:' + document.getElementById('inp-email').value;
-            document.getElementById('prev-web-link').href = 'https://' + document.getElementById('inp-web').value.replace(/^https?:\/\//, '');
+            document.getElementById('signature-preview').innerHTML = signatureHTML;
         }
 
-        function copySignature() {
-            const preview = document.getElementById('signature-preview');
-            const range = document.createRange();
-            range.selectNode(preview);
-            
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
+        // Copies the rendered HTML structure to clipboard preserving tables and fonts
+        async function copySignature() {
+            const previewEl = document.getElementById('signature-preview');
             
             try {
-                document.execCommand('copy');
-                alert('Signature copied to clipboard! Paste it directly into your Gmail Signature settings.');
+                const htmlBlob = new Blob([previewEl.innerHTML], { type: 'text/html' });
+                const textBlob = new Blob([previewEl.innerText], { type: 'text/plain' });
+                const clipboardItem = new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                });
+                await navigator.clipboard.write([clipboardItem]);
+                alert("Signature copied to clipboard! Paste it directly into Gmail's signature settings.");
             } catch (err) {
-                alert('Unable to copy automatically. Please select and copy manually.');
+                // Fallback for older browsers
+                const range = document.createRange();
+                range.selectNode(previewEl);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                document.execCommand('copy');
+                selection.removeAllRanges();
+                alert("Signature copied! Paste directly into Gmail.");
             }
-            selection.removeAllRanges();
         }
+
+        // Initialize on load
+        window.onload = function() {
+            initOfficeInputs();
+            renderSignature();
+        };
     </script>
 </body>
 </html>
